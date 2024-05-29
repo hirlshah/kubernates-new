@@ -1,0 +1,25 @@
+# Drain and cordon worker nodes
+kubectl drain <node-name> --ignore-daemonsets
+kubectl cordon <node-name>
+
+# Upgrade kubeadm, kubelet, and kubectl on the control plane node
+apt-get update && apt-get install -y kubeadm=<new-version> kubelet=<new-version> kubectl=<new-version>
+
+# Upgrade control plane components
+kubeadm upgrade apply <new-version>
+
+# Upgrade kubelet and kubectl on worker nodes
+apt-get update && apt-get install -y kubeadm=<new-version> kubelet=<new-version> kubectl=<new-version>
+
+# Uncordon worker node
+kubectl uncordon <node-name>
+
+# Verify upgrade
+kubectl get nodes
+kubectl get pods --all-namespaces
+
+# Perform any additional steps required by your cluster (e.g., updating CNI plugins, addons, etc.)
+
+# Ensure the cluster is stable and applications are functioning correctly
+
+# Monitor cluster health and performance after the upgrade

@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-specific-pods
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: allowed-app
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: allowed-app
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: allowed-app
+
+
+kubectl describe networkpolicy allow-specific-pods -n default

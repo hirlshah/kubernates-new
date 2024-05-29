@@ -1,0 +1,30 @@
+ Ensure Metrics Server is Running
+HPA relies on resource metrics, which are provided by the Metrics Server. If it's not already installed, you can install it using the following command:
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+2)  Verify Metrics Server
+kubectl get apiservices | grep metrics
+kubectl top nodes
+
+Create or Update a Deployment
+nginx-deployment.yaml
+kubectl apply -f nginx-deployment.yaml
+
+Create the Horizontal Pod Autoscaler
+ginx-hpa.yaml
+kubectl apply -f nginx-hpa.yaml
+
+
+kubectl get hpa
+kubectl describe hpa nginx-hpa
+
+Simulate Load 
+To test the autoscaler, you can simulate a load on your deployment. Here is an example of how you can create CPU load using a busybox container:
+
+kubectl run -i --tty load-generator --image=busybox /bin/sh
+
+# Inside the container, run the following command to create load
+while true; do wget -q -O- http://nginx-deployment; done
+
+

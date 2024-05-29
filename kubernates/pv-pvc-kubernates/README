@@ -1,0 +1,73 @@
+kubectl apply -f pv.yaml
+kubectl apply -f pvc.yaml
+kubectl apply -f mysql-deployment.yaml
+
+docker pull mysql:5.7
+
+kubectl logs mysql-6b748b4c5f-pddjk
+
+
+kubectl get pv
+kubectl get pvc
+kubectl get pods
+
+
+kubectl get role -n my-namespace
+kubectl get rolebinding -n my-namespace
+
+
+kubectl get daemonset fluentd -n kube-system
+
+#To list the pods created by the DaemonSet:
+kubectl get pods -l k8s-app=fluentd-logging -n kube-system
+#To view logs from one of the Fluentd pods:
+kubectl logs <fluentd-pod-name> -n kube-system
+
+
+
+kubectl edit daemonset fluentd -n kube-system
+
+kubectl get statefulset mongo
+kubectl get pods -l app=mongo
+
+kubectl describe pod mongo-0
+
+########helm#########
+install helm
+then
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm show values bitnami/wordpress > values.yaml
+cat values.yaml
+mariadb:
+  auth:
+    rootPassword: your-root-password
+    database: wordpress
+    username: bn_wordpress
+    password: your-database-password
+
+wordpressUsername: your-wp-username
+wordpressPassword: your-wp-password
+
+service:
+  type: LoadBalancer
+
+persistence:
+  enabled: true
+  storageClass: "standard"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
+
+ Deploy WordPress Using Helm
+helm install my-wordpress bitnami/wordpress -f values.yaml
+
+Verify the Deployment
+helm status my-wordpress
+kubectl get all -l app.kubernetes.io/name=wordpress
+
+Access WordPress
+kubectl get svc --namespace default -w my-wordpress
+For NodePort
+kubectl get svc my-wordpress -o jsonpath='{.spec.ports[0].nodePort}'
+

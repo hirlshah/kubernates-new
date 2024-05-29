@@ -1,0 +1,19 @@
+mariadb:
+  auth:
+    rootPassword: your-root-password
+    database: wordpress
+    username: bn_wordpress
+    password: your-database-password
+
+wordpressUsername: your-wp-username
+wordpressPassword: your-wp-password
+
+service:
+  type: LoadBalancer
+
+persistence:
+  enabled: true
+  storageClass: "standard"
+  accessModes:
+    - ReadWriteOnce
+  size: 8Gi
